@@ -2,6 +2,7 @@ package com.atlassian.performance.tools.jiraactions.api.memories.adaptive
 
 import com.atlassian.performance.tools.jiraactions.api.SeededRandom
 import com.atlassian.performance.tools.jiraactions.api.memories.JqlMemory
+import com.atlassian.performance.tools.jiraactions.api.memories.JqlTypes
 import com.atlassian.performance.tools.jiraactions.api.memories.adaptive.jql.JqlPrescription
 import com.atlassian.performance.tools.jiraactions.api.memories.adaptive.jql.JqlPrescriptions
 import com.atlassian.performance.tools.jiraactions.api.page.IssuePage
@@ -42,6 +43,10 @@ class AdaptiveJqlMemory(
 
     override fun recall(): String? {
         return random.pick(jqls)
+    }
+
+    override fun recall(func: (String) -> Boolean): String? {
+        return "empty jql"
     }
 
     override fun remember(memories: Collection<String>) {
