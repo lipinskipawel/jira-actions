@@ -6,6 +6,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.ExpectedConditions.or
 import org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated
+import java.lang.Exception
 import java.time.Duration
 
 class IssuePage(
@@ -13,6 +14,11 @@ class IssuePage(
 ) {
     private val reporterUserField = By.cssSelector("#reporter-val span")
     private val assigneeUserField = By.cssSelector("#assignee-val span")
+    private val moreActionButton = By.id("opsbar-operations_more")
+    private val archiveIssue = By.id("archive-issue")
+    private val archiveIssueConf = By.id("archive-issue-submit")
+    private val deleteIssue = By.id("delete-issue")
+    private val deleteIssueConf = By.id("delete-issue-submit")
     private val projectNameInBreadcrumbs = By.id("project-name-val")
     private val summaryField = By.id("summary-val")
 
@@ -38,6 +44,30 @@ class IssuePage(
 
     fun getReporter(): String? {
         return driver.findElements(reporterUserField).firstOrNull()?.getAttribute("rel")
+    }
+
+    fun archive(): Boolean {
+        return try {
+            driver.findElement(moreActionButton).click()
+            driver.findElement(archiveIssue).click()
+            driver.wait(Duration.ofSeconds(1), visibilityOfElementLocated(archiveIssueConf))
+                .click()
+            true
+        } catch (ee: Exception) {
+            false
+        }
+    }
+
+    fun delete(): Boolean {
+        return try {
+            driver.findElement(moreActionButton).click()
+            driver.findElement(deleteIssue).click()
+            driver.wait(Duration.ofSeconds(1), visibilityOfElementLocated(deleteIssueConf))
+                .click()
+            true
+        } catch (ee: Exception) {
+            false
+        }
     }
 
     fun getPossiblePriorities(): List<String>? {
